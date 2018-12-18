@@ -26,13 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->regiontextEdit->setEnabled(false);
 
     // 初始化设置lcd显示器
-    ui->startYear->display("----");
-    ui->startMonth->display("--");
-    ui->startDate->display("--");
+    ui->startYear->display("1900");
+    ui->startMonth->display("1");
+    ui->startDate->display("1");
 
-    ui->endYear->display("----");
-    ui->endMonth->display("--");
-    ui->endDate->display("--");
+    ui->endYear->display(QDate::currentDate().year());
+    ui->endMonth->display(QDate::currentDate().month());
+    ui->endDate->display(QDate::currentDate().day());
 }
 
 MainWindow::~MainWindow()
@@ -78,9 +78,9 @@ void MainWindow::startDateToggled(bool toggled)
 
     if (toggled == false)
     {
-        ui->startYear->display("----");
-        ui->startMonth->display("--");
-        ui->startDate->display("--");
+        ui->startYear->display(1900);
+        ui->startMonth->display(1);
+        ui->startDate->display(1);
     }
     else
     {
@@ -95,9 +95,9 @@ void MainWindow::endDateToggled(bool toggled)
     ui->enddateEdit->setEnabled(toggled);
     if (toggled == false)
     {
-        ui->endYear->display("----");
-        ui->endMonth->display("--");
-        ui->endDate->display("--");
+        ui->endYear->display(QDate::currentDate().year());
+        ui->endMonth->display(QDate::currentDate().month());
+        ui->endDate->display(QDate::currentDate().day());
     }
     else
     {
@@ -115,7 +115,10 @@ void MainWindow::regionToggled(bool toggled)
 void MainWindow::dataExtract()
 {
     if (filePath.isEmpty() || storePath.isEmpty())
+    {
         QMessageBox::warning(this, "warning", "Path setting is not complete!!!");
+        return;
+    }
     else
     {
         QTime time;
@@ -143,6 +146,13 @@ void MainWindow::dataExtract()
             endDate = QDate::currentDate();
         else
             endDate.setDate(ui->enddateEdit->date().year(), ui->enddateEdit->date().month(), ui->enddateEdit->date().day());
+
+        // 如果终止日期早于起始日期，则需要进行报错
+        if (startDate > endDate)
+        {
+            QMessageBox::warning(this, "warning", "date error!!!");
+            return;
+        }
 
         // 写入终端命令
         terminalCode = terminalCode + QString::number(startDate.year()) + " ";

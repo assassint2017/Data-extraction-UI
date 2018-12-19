@@ -33,6 +33,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->endYear->display(QDate::currentDate().year());
     ui->endMonth->display(QDate::currentDate().month());
     ui->endDate->display(QDate::currentDate().day());
+
+    // 创建自定义可拖拽文件的文本显示器
+    targetPathBrowser = new dropTextBrowser;
+    QObject::connect(targetPathBrowser, &dropTextBrowser::fileNameChanged, this, &MainWindow::targetPathDrop);
+    ui->horizontalLayout->insertWidget(1, targetPathBrowser);
 }
 
 MainWindow::~MainWindow()
@@ -57,7 +62,7 @@ void MainWindow::showEndDate(const QDate &endDate)
 void MainWindow::ontargetPathClicked()
 {
     filePath = QFileDialog::getOpenFileName(this, "csv文件目录", ".");
-    ui->targetPathBrowser->setText(filePath);
+    targetPathBrowser->setText(filePath);
 }
 
 void MainWindow::onstorePathClicked()
@@ -69,6 +74,7 @@ void MainWindow::onstorePathClicked()
     }
     else
         storePath = QFileDialog::getExistingDirectory(this, "保存路径", ".");
+
     ui->storePathBrowser->setText(storePath);
 }
 
@@ -110,6 +116,11 @@ void MainWindow::endDateToggled(bool toggled)
 void MainWindow::regionToggled(bool toggled)
 {
     ui->regiontextEdit->setEnabled(toggled);
+}
+
+void MainWindow::targetPathDrop(const QString &fileName)
+{
+    filePath = fileName;
 }
 
 void MainWindow::dataExtract()

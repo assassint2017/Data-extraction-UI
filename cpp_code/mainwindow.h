@@ -11,6 +11,8 @@
 #include <QDate>
 #include <QTime>
 
+#include "droptextbrowser.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -42,12 +44,18 @@ private:
     void showStartDate(const QDate&);
     void showEndDate(const QDate&);
 
+    // 拖拽文件的槽函数
+    void targetPathDrop(const QString &);
+
     // 文件路径
     QString filePath;
     QString storePath;
 
     // 起始日期、终止日期
     QDate startDate, endDate;
+
+    // 两个自定义的可拖拽文件的文本显示器
+    dropTextBrowser *targetPathBrowser;
 };
 
 #endif // MAINWINDOW_H

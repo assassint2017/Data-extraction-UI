@@ -23,21 +23,138 @@ MainWindow::MainWindow(QWidget *parent) :
     // 初始禁用部分部件
     ui->startdateEdit->setEnabled(false);
     ui->enddateEdit->setEnabled(false);
-    ui->regiontextEdit->setEnabled(false);
-
-    // 初始化设置lcd显示器
-    ui->startYear->display("1900");
-    ui->startMonth->display("1");
-    ui->startDate->display("1");
-
-    ui->endYear->display(QDate::currentDate().year());
-    ui->endMonth->display(QDate::currentDate().month());
-    ui->endDate->display(QDate::currentDate().day());
 
     // 创建自定义可拖拽文件的文本显示器
     targetPathBrowser = new dropTextBrowser;
     QObject::connect(targetPathBrowser, &dropTextBrowser::fileNameChanged, this, &MainWindow::targetPathDrop);
     ui->horizontalLayout->insertWidget(1, targetPathBrowser);
+
+    // 创建指示箭头
+    startYearArrow = new indicatorArrow;
+    startMonthArrow = new indicatorArrow;
+    startDateArrow = new indicatorArrow;
+
+    endYearArrow = new indicatorArrow;
+    endMonthArrow = new indicatorArrow;
+    endDateArrow = new indicatorArrow;
+
+    // 创建lcd
+    startYearLcd = new lcd;
+    startMonthLcd = new lcd;
+    startDateLcd = new lcd;
+
+    endYearLcd = new lcd;
+    endMonthLcd = new lcd;
+    endDateLcd = new lcd;
+
+    startYearLcd->setDigitCount(4);
+    startYearLcd->setMaximumNumber(2100);
+    startYearLcd->setMinimumNumber(1900);
+    endYearLcd->setDigitCount(4);
+    endYearLcd->setMaximumNumber(2100);
+    endYearLcd->setMinimumNumber(1900);
+
+    startMonthLcd->setDigitCount(2);
+    startMonthLcd->setMaximumNumber(12);
+    startMonthLcd->setMinimumNumber(1);
+    endMonthLcd->setDigitCount(2);
+    endMonthLcd->setMaximumNumber(12);
+    endMonthLcd->setMinimumNumber(1);
+
+    startDateLcd->setDigitCount(2);
+    startDateLcd->setMaximumNumber(31);
+    startDateLcd->setMinimumNumber(1);
+    endDateLcd->setDigitCount(2);
+    endDateLcd->setMaximumNumber(getMaxdate(QDate::currentDate().year(), QDate::currentDate().month()));
+    endDateLcd->setMinimumNumber(1);
+
+    // 初始化设置lcd显示器
+    startYearLcd->display(1900);
+    startMonthLcd->display(1);
+    startDateLcd->display(1);
+
+    endYearLcd->display(QDate::currentDate().year());
+    endMonthLcd->display(QDate::currentDate().month());
+    endDateLcd->display(QDate::currentDate().day());
+
+    startYearLcd->setEnabled(false);
+    startMonthLcd->setEnabled(false);
+    startDateLcd->setEnabled(false);
+
+    endYearLcd->setEnabled(false);
+    endMonthLcd->setEnabled(false);
+    endDateLcd->setEnabled(false);
+
+    // 连接lcd和指示箭头之间的信号槽
+    QObject::connect(startYearLcd, &lcd::add, startYearArrow, &indicatorArrow::onLcdadd);
+    QObject::connect(startMonthLcd, &lcd::add, startMonthArrow, &indicatorArrow::onLcdadd);
+    QObject::connect(startDateLcd, &lcd::add, startDateArrow, &indicatorArrow::onLcdadd);
+
+    QObject::connect(startYearLcd, &lcd::sub, startYearArrow, &indicatorArrow::onLcdsub);
+    QObject::connect(startMonthLcd, &lcd::sub, startMonthArrow, &indicatorArrow::onLcdsub);
+    QObject::connect(startDateLcd, &lcd::sub, startDateArrow, &indicatorArrow::onLcdsub);
+
+    QObject::connect(endYearLcd, &lcd::add, endYearArrow, &indicatorArrow::onLcdadd);
+    QObject::connect(endMonthLcd, &lcd::add, endMonthArrow, &indicatorArrow::onLcdadd);
+    QObject::connect(endDateLcd, &lcd::add, endDateArrow, &indicatorArrow::onLcdadd);
+
+    QObject::connect(endYearLcd, &lcd::sub, endYearArrow, &indicatorArrow::onLcdsub);
+    QObject::connect(endMonthLcd, &lcd::sub, endMonthArrow, &indicatorArrow::onLcdsub);
+    QObject::connect(endDateLcd, &lcd::sub, endDateArrow, &indicatorArrow::onLcdsub);
+
+    // 设置日期范围的槽函数
+    QObject::connect(startYearLcd, &lcd::valueChanged, this, &MainWindow::onstartLcdValueChanged);
+    QObject::connect(startMonthLcd, &lcd::valueChanged, this, &MainWindow::onstartLcdValueChanged);
+
+    QObject::connect(endYearLcd, &lcd::valueChanged, this, &MainWindow::onendLcdValueChanged);
+    QObject::connect(endMonthLcd, &lcd::valueChanged, this, &MainWindow::onendLcdValueChanged);
+
+    // 同步日历和lcd的槽函数
+    QObject::connect(startYearLcd, &lcd::valueChanged, this, &MainWindow::onLcdValueChanged);
+    QObject::connect(startMonthLcd, &lcd::valueChanged, this, &MainWindow::onLcdValueChanged);
+    QObject::connect(startDateLcd, &lcd::valueChanged, this, &MainWindow::onLcdValueChanged);
+
+    QObject::connect(endYearLcd, &lcd::valueChanged, this, &MainWindow::onLcdValueChanged);
+    QObject::connect(endMonthLcd, &lcd::valueChanged, this, &MainWindow::onLcdValueChanged);
+    QObject::connect(endDateLcd, &lcd::valueChanged, this, &MainWindow::onLcdValueChanged);
+
+
+    // 将自定义的lcd和指示箭头加入到主界面中
+    ui->horizontalLayout_3->insertWidget(5, startYearLcd);
+    ui->horizontalLayout_3->insertWidget(7, startYearArrow);
+    ui->horizontalLayout_3->insertWidget(8, startMonthLcd);
+    ui->horizontalLayout_3->insertWidget(10, startMonthArrow);
+    ui->horizontalLayout_3->insertWidget(11, startDateLcd);
+    ui->horizontalLayout_3->insertWidget(13, startDateArrow);
+
+    ui->horizontalLayout_4->insertWidget(5, endYearLcd);
+    ui->horizontalLayout_4->insertWidget(7, endYearArrow);
+    ui->horizontalLayout_4->insertWidget(8, endMonthLcd);
+    ui->horizontalLayout_4->insertWidget(10, endMonthArrow);
+    ui->horizontalLayout_4->insertWidget(11, endDateLcd);
+    ui->horizontalLayout_4->insertWidget(13, endDateArrow);
+
+    // 创建地区编号表格
+    regionEditer = new QTableWidget;
+
+    QStringList header;
+    header << "地区编码";
+
+    regionEditer->setRowCount(4);
+    regionEditer->setColumnCount(1);
+    regionEditer->setColumnWidth(0, 370);
+    regionEditer->setHorizontalHeaderLabels(header);
+    regionEditer->setEnabled(false);
+
+    ui->horizontalLayout_5->insertWidget(4, regionEditer);
+
+    // 设置添加行按钮
+    ui->addRowPushButton->setEnabled(false);
+    QObject::connect(ui->addRowPushButton, &QPushButton::clicked, this, &MainWindow::addrow);
+
+    // 设置删除选中行按钮
+    ui->removeRowpushButton->setEnabled(false);
+    QObject::connect(ui->removeRowpushButton, &QPushButton::clicked, this, &MainWindow::removerow);
 }
 
 MainWindow::~MainWindow()
@@ -47,16 +164,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::showStartDate(const QDate &startDate)
 {
-    ui->startYear->display(startDate.year());
-    ui->startMonth->display(startDate.month());
-    ui->startDate->display(startDate.day());
+    startYearLcd->display(startDate.year());
+    startMonthLcd->display(startDate.month());
+    startDateLcd->display(startDate.day());
 }
 
 void MainWindow::showEndDate(const QDate &endDate)
 {
-    ui->endYear->display(endDate.year());
-    ui->endMonth->display(endDate.month());
-    ui->endDate->display(endDate.day());
+    endYearLcd->display(endDate.year());
+    endMonthLcd->display(endDate.month());
+    endDateLcd->display(endDate.day());
 }
 
 void MainWindow::ontargetPathClicked()
@@ -81,46 +198,132 @@ void MainWindow::onstorePathClicked()
 void MainWindow::startDateToggled(bool toggled)
 {
     ui->startdateEdit->setEnabled(toggled);
+    startYearLcd->setEnabled(toggled);
+    startMonthLcd->setEnabled(toggled);
+    startDateLcd->setEnabled(toggled);
 
     if (toggled == false)
     {
-        ui->startYear->display(1900);
-        ui->startMonth->display(1);
-        ui->startDate->display(1);
+        startYearLcd->display(1900);
+        startMonthLcd->display(1);
+        startDateLcd->display(1);
     }
     else
     {
-        ui->startYear->display(ui->startdateEdit->date().year());
-        ui->startMonth->display(ui->startdateEdit->date().month());
-        ui->startDate->display(ui->startdateEdit->date().day());
+        startYearLcd->display(ui->startdateEdit->date().year());
+        startMonthLcd->display(ui->startdateEdit->date().month());
+        startDateLcd->display(ui->startdateEdit->date().day());
     }
 }
 
 void MainWindow::endDateToggled(bool toggled)
 {
     ui->enddateEdit->setEnabled(toggled);
+    endYearLcd->setEnabled(toggled);
+    endMonthLcd->setEnabled(toggled);
+    endDateLcd->setEnabled(toggled);
+
     if (toggled == false)
     {
-        ui->endYear->display(QDate::currentDate().year());
-        ui->endMonth->display(QDate::currentDate().month());
-        ui->endDate->display(QDate::currentDate().day());
+        endYearLcd->display(QDate::currentDate().year());
+        endMonthLcd->display(QDate::currentDate().month());
+        endDateLcd->display(QDate::currentDate().day());
     }
     else
     {
-        ui->endYear->display(ui->enddateEdit->date().year());
-        ui->endMonth->display(ui->enddateEdit->date().month());
-        ui->endDate->display(ui->enddateEdit->date().day());
+        endYearLcd->display(ui->enddateEdit->date().year());
+        endMonthLcd->display(ui->enddateEdit->date().month());
+        endDateLcd->display(ui->enddateEdit->date().day());
     }
+}
+
+void MainWindow::onstartLcdValueChanged()
+{
+    int year = static_cast<int>(startYearLcd->value());
+    int month = static_cast<int>(startMonthLcd->value());
+
+    int maxDate = getMaxdate(year, month);
+    if (startDateLcd->value() > maxDate) startDateLcd->display(maxDate);
+
+    startDateLcd->setMaximumNumber(getMaxdate(year, month));
+
+}
+
+void MainWindow::onendLcdValueChanged()
+{
+    int year = static_cast<int>(endYearLcd->value());
+    int month = static_cast<int>(endMonthLcd->value());
+
+    int maxDate = getMaxdate(year, month);
+
+    if (endDateLcd->value() > maxDate) endDateLcd->display(maxDate);
+    endDateLcd->setMaximumNumber(maxDate);
+}
+
+int MainWindow::getMaxdate(int year, int month)
+{
+    int maxDate = 0;
+    switch (month)
+    {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+        maxDate = 31;
+        break;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        maxDate = 30;
+        break;
+    case 2:
+        if (QDate::isLeapYear(year))
+            maxDate = 29;
+        else
+            maxDate = 28;
+        break;
+    }
+    return maxDate;
+}
+
+void MainWindow::onLcdValueChanged()
+{
+    ui->startdateEdit->setDate(QDate(
+                                   static_cast<int>(startYearLcd->value()),
+                                   static_cast<int>(startMonthLcd->value()),
+                                   static_cast<int>(startDateLcd->value())
+                                 ));
+    ui->enddateEdit->setDate(QDate(
+                                 static_cast<int>(endYearLcd->value()),
+                                 static_cast<int>(endMonthLcd->value()),
+                                 static_cast<int>(endDateLcd->value())
+                                 ));
 }
 
 void MainWindow::regionToggled(bool toggled)
 {
-    ui->regiontextEdit->setEnabled(toggled);
+    regionEditer->setEnabled(toggled);
+    ui->addRowPushButton->setEnabled(toggled);
+    ui->removeRowpushButton->setEnabled(toggled);
 }
 
 void MainWindow::targetPathDrop(const QString &fileName)
 {
     filePath = fileName;
+}
+
+void MainWindow::addrow()
+{
+    regionEditer->insertRow(regionEditer->rowCount());
+}
+
+void MainWindow::removerow()
+{
+    regionEditer->removeRow(regionEditer->currentRow());
 }
 
 void MainWindow::dataExtract()
@@ -177,11 +380,13 @@ void MainWindow::dataExtract()
         // 确定地区编码
         if (ui->regioncheckBox->isChecked())
         {
-            QString region = ui->regiontextEdit->toPlainText();
-            QStringList regions = region.split("\n");
-
-            for (int i = 0; i < regions.size(); i++)
-                terminalCode = terminalCode + " " + regions.at(i);
+            for (int i = 0; i < regionEditer->rowCount(); i++)
+            {
+                if (regionEditer->item(i, 0))
+                {
+                    terminalCode = terminalCode + " " + regionEditer->item(i, 0)->text();
+                }
+            }
         }
         else
         {
@@ -192,8 +397,11 @@ void MainWindow::dataExtract()
             }
         }
 
+        // 确认要执行数据提取，禁用按钮防止二次点击
+        ui->extractpushButton->setEnabled(false);
+
         // 调用python脚本提取数据
-        qDebug() << terminalCode << endl;
+        // qDebug() << terminalCode << endl;
         system(terminalCode.toStdString().c_str());
 
         // 提取完毕，弹出对话框提醒用户并显示所用时间
@@ -201,7 +409,7 @@ void MainWindow::dataExtract()
         sprintf(temp, "time: %.2f s", time.elapsed() / 1000.0);
         QMessageBox::information(this, "info", temp);
 
-        // 清空地区输入框
-        ui->regiontextEdit->clear();
+        // 提取完毕，恢复按钮的使用权限
+        ui->extractpushButton->setEnabled(false);
     }
 }

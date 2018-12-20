@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
-    <height>506</height>
+    <width>600</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,14 +21,14 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>441</width>
-    <height>506</height>
+    <width>600</width>
+    <height>550</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>441</width>
-    <height>506</height>
+    <width>600</width>
+    <height>550</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -38,8 +38,17 @@
    <layout class="QVBoxLayout" name="verticalLayout_5">
     <item>
      <widget class="QGroupBox" name="groupBox">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="title">
        <string>路径选择</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -52,23 +61,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QTextBrowser" name="targetPathBrowser">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>30</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="targetPathpushButton">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="text">
             <string>path?</string>
            </property>
@@ -97,14 +93,17 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>25</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>25</height>
             </size>
+           </property>
+           <property name="acceptRichText">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -129,6 +128,9 @@
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox_2">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="title">
        <string>日期选择</string>
       </property>
@@ -160,13 +162,13 @@
           <widget class="QDateEdit" name="startdateEdit">
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>85</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>400</width>
+             <width>85</width>
              <height>16777215</height>
             </size>
            </property>
@@ -190,30 +192,32 @@
           </widget>
          </item>
          <item>
-          <widget class="QLCDNumber" name="startYear">
-           <property name="font">
-            <font>
-             <pointsize>7</pointsize>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-           <property name="smallDecimalPoint">
-            <bool>false</bool>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
            </property>
-           <property name="digitCount">
-            <number>4</number>
-           </property>
-           <property name="segmentStyle">
-            <enum>QLCDNumber::Flat</enum>
-           </property>
-           <property name="intValue" stdset="0">
-            <number>2000</number>
-           </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <widget class="QLabel" name="label_5">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>9</pointsize>
@@ -225,35 +229,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QLCDNumber" name="startMonth">
-           <property name="digitCount">
-            <number>2</number>
-           </property>
-           <property name="segmentStyle">
-            <enum>QLCDNumber::Flat</enum>
-           </property>
-           <property name="intValue" stdset="0">
-            <number>1</number>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>月</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLCDNumber" name="startDate">
-           <property name="digitCount">
-            <number>2</number>
-           </property>
-           <property name="segmentStyle">
-            <enum>QLCDNumber::Flat</enum>
-           </property>
-           <property name="intValue" stdset="0">
-            <number>1</number>
            </property>
           </widget>
          </item>
@@ -298,6 +276,18 @@
          </item>
          <item>
           <widget class="QDateEdit" name="enddateEdit">
+           <property name="minimumSize">
+            <size>
+             <width>85</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>85</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="dateTime">
             <datetime>
              <hour>0</hour>
@@ -328,20 +318,17 @@
           </widget>
          </item>
          <item>
-          <widget class="QLCDNumber" name="endYear">
-           <property name="smallDecimalPoint">
-            <bool>false</bool>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-           <property name="digitCount">
-            <number>4</number>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
            </property>
-           <property name="segmentStyle">
-            <enum>QLCDNumber::Flat</enum>
-           </property>
-           <property name="intValue" stdset="0">
-            <number>2018</number>
-           </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <widget class="QLabel" name="label_8">
@@ -351,35 +338,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QLCDNumber" name="endMonth">
-           <property name="digitCount">
-            <number>2</number>
-           </property>
-           <property name="segmentStyle">
-            <enum>QLCDNumber::Flat</enum>
-           </property>
-           <property name="intValue" stdset="0">
-            <number>1</number>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QLabel" name="label_9">
            <property name="text">
             <string>月</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLCDNumber" name="endDate">
-           <property name="digitCount">
-            <number>2</number>
-           </property>
-           <property name="segmentStyle">
-            <enum>QLCDNumber::Flat</enum>
-           </property>
-           <property name="intValue" stdset="0">
-            <number>1</number>
            </property>
           </widget>
          </item>
@@ -404,6 +365,9 @@
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox_3">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="title">
        <string>地区选择</string>
       </property>
@@ -425,14 +389,22 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>地区编码：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTextEdit" name="regiontextEdit"/>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QPushButton" name="addRowPushButton">
+             <property name="text">
+              <string>添加行</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="removeRowpushButton">
+             <property name="text">
+              <string>删除选中行</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -448,6 +420,9 @@
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox_4">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="title">
        <string>数据提取</string>
       </property>
@@ -469,8 +444,29 @@
          </item>
          <item>
           <widget class="QPushButton" name="extractpushButton">
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+             <underline>true</underline>
+             <strikeout>false</strikeout>
+            </font>
+           </property>
            <property name="text">
-            <string>开始提取</string>
+            <string>开 始 提 取</string>
            </property>
           </widget>
          </item>
@@ -488,6 +484,19 @@
           </spacer>
          </item>
         </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

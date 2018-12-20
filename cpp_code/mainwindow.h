@@ -4,14 +4,19 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 #include <QString>
 #include <QStringList>
 #include <QFileInfo>
 #include <QDebug>
 #include <QDate>
 #include <QTime>
+#include <QIcon>
 
 #include "droptextbrowser.h"
+#include "indicatorarrow.h"
+#include "lcd.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +28,10 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+
+    void onstartLcdValueChanged();
+    void onendLcdValueChanged();
+
     ~MainWindow();
 
 private:
@@ -47,6 +56,20 @@ private:
     // 拖拽文件的槽函数
     void targetPathDrop(const QString &);
 
+    // 添加行槽函数
+    void addrow();
+
+    // 添加删除行槽函数
+    void removerow();
+
+    //
+    void onLcdValueChanged();
+
+    //
+    int getMaxdate(int, int);
+
+
+
     // 文件路径
     QString filePath;
     QString storePath;
@@ -54,8 +77,29 @@ private:
     // 起始日期、终止日期
     QDate startDate, endDate;
 
-    // 两个自定义的可拖拽文件的文本显示器
+    // 自定义的可拖拽文件的文本显示器
     dropTextBrowser *targetPathBrowser;
+
+    // 指示箭头
+    indicatorArrow *startYearArrow;
+    indicatorArrow *startMonthArrow;
+    indicatorArrow *startDateArrow;
+
+    indicatorArrow *endYearArrow;
+    indicatorArrow *endMonthArrow;
+    indicatorArrow *endDateArrow;
+
+    // 自定义的lcd数字显示器
+    lcd *startYearLcd;
+    lcd *startMonthLcd;
+    lcd *startDateLcd;
+
+    lcd *endYearLcd;
+    lcd *endMonthLcd;
+    lcd *endDateLcd;
+
+    // 地区编号表格
+    QTableWidget *regionEditer;
 };
 
 #endif // MAINWINDOW_H

@@ -1,7 +1,11 @@
 #include "lcd.h"
 
-#include <QDebug>
 lcd::lcd()
+{
+
+}
+
+lcd::~lcd()
 {
 
 }

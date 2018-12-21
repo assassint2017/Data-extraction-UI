@@ -1,22 +1,23 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QDate>
+#include <QTime>
+#include <QIcon>
+#include <QDebug>
+#include <QString>
+#include <QFileInfo>
+#include <QStringList>
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <QString>
-#include <QStringList>
-#include <QFileInfo>
-#include <QDebug>
-#include <QDate>
-#include <QTime>
-#include <QIcon>
 
-#include "droptextbrowser.h"
-#include "indicatorarrow.h"
 #include "lcd.h"
+#include "indicatorarrow.h"
+#include "droptextbrowser.h"
+#include "dataextractthread.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,10 +29,6 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-
-    void onstartLcdValueChanged();
-    void onendLcdValueChanged();
-
     ~MainWindow();
 
 private:
@@ -47,7 +44,7 @@ private:
     void regionToggled(bool);
 
     // 数据提取按钮的槽函数
-    void dataExtract();
+    void confirmdataExtract();
 
     // 显示时间的槽函数
     void showStartDate(const QDate&);
@@ -62,13 +59,18 @@ private:
     // 添加删除行槽函数
     void removerow();
 
-    //
+    // 指示箭头槽函数
+    void onstartLcdValueChanged();
+    void onendLcdValueChanged();
+
+    // 同步lcd和日期设置的槽函数
     void onLcdValueChanged();
 
-    //
+    // 提取数据线程结束的槽函数
+    void ondataExtractThreadFinished();
+
+    // 获取日期范围
     int getMaxdate(int, int);
-
-
 
     // 文件路径
     QString filePath;
@@ -100,6 +102,12 @@ private:
 
     // 地区编号表格
     QTableWidget *regionEditer;
+
+    // 计算数据提取时间的计时器
+    QTime *timer;
+
+    // 数据提取线程
+    dataExtractThread *dataThread;
 };
 
 #endif // MAINWINDOW_H

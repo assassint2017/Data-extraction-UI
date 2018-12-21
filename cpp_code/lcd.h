@@ -9,12 +9,14 @@ class lcd : public QLCDNumber
     Q_OBJECT
 public:
     lcd();
+    ~lcd();
+
+    // 设置日期范围
     void setMaximumNumber(int);
     void setMinimumNumber(int);
 signals:
     void add();
     void sub();
-
     void valueChanged();
 
 protected:

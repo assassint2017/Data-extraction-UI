@@ -1,14 +1,14 @@
 #ifndef DROPTEXTBROWSER_H
 #define DROPTEXTBROWSER_H
 
-#include <QTextBrowser>
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QFile>
 #include <QUrl>
-#include <QMimeData>
+#include <QFile>
 #include <QString>
+#include <QMimeData>
+#include <QDropEvent>
+#include <QTextBrowser>
+#include <QDragMoveEvent>
+#include <QDragEnterEvent>
 
 class dropTextBrowser : public QTextBrowser
 {

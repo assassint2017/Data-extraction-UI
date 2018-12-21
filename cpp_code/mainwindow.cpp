@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // 连接信号的槽函数
+    // 连接信号&槽函数
     QObject::connect(ui->targetPathpushButton, &QPushButton::clicked, this, &MainWindow::ontargetPathClicked);
     QObject::connect(ui->storePathpushButton, &QPushButton::clicked, this, &MainWindow::onstorePathClicked);
 
@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->startdateEdit, &QDateEdit::userDateChanged, this, &MainWindow::showStartDate);
     QObject::connect(ui->enddateEdit, &QDateEdit::userDateChanged, this, &MainWindow::showEndDate);
 
-    QObject::connect(ui->extractpushButton, &QPushButton::clicked, this, &MainWindow::dataExtract);
+    QObject::connect(ui->extractpushButton, &QPushButton::clicked, this, &MainWindow::confirmdataExtract);
 
     // 初始禁用部分部件
     ui->startdateEdit->setEnabled(false);
@@ -118,7 +118,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(endMonthLcd, &lcd::valueChanged, this, &MainWindow::onLcdValueChanged);
     QObject::connect(endDateLcd, &lcd::valueChanged, this, &MainWindow::onLcdValueChanged);
 
-
     // 将自定义的lcd和指示箭头加入到主界面中
     ui->horizontalLayout_3->insertWidget(5, startYearLcd);
     ui->horizontalLayout_3->insertWidget(7, startYearArrow);
@@ -155,6 +154,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // 设置删除选中行按钮
     ui->removeRowpushButton->setEnabled(false);
     QObject::connect(ui->removeRowpushButton, &QPushButton::clicked, this, &MainWindow::removerow);
+
+    // 创建计时器
+    timer = new QTime;
 }
 
 MainWindow::~MainWindow()
@@ -326,7 +328,7 @@ void MainWindow::removerow()
     regionEditer->removeRow(regionEditer->currentRow());
 }
 
-void MainWindow::dataExtract()
+void MainWindow::confirmdataExtract()
 {
     if (filePath.isEmpty() || storePath.isEmpty())
     {
@@ -335,9 +337,6 @@ void MainWindow::dataExtract()
     }
     else
     {
-        QTime time;
-        time.start();
-
         QString terminalCode = ".\\dataExtraction.exe ";
 
         QFileInfo fi;
@@ -400,16 +399,27 @@ void MainWindow::dataExtract()
         // 确认要执行数据提取，禁用按钮防止二次点击
         ui->extractpushButton->setEnabled(false);
 
-        // 调用python脚本提取数据
-        // qDebug() << terminalCode << endl;
-        system(terminalCode.toStdString().c_str());
+        // 创建数据提取线程
+        dataThread = new dataExtractThread(terminalCode);
 
-        // 提取完毕，弹出对话框提醒用户并显示所用时间
-        char temp[20];
-        sprintf(temp, "time: %.2f s", time.elapsed() / 1000.0);
-        QMessageBox::information(this, "info", temp);
+        // 连接槽函数
+        QObject::connect(dataThread, &dataExtractThread::finished, this, &MainWindow::ondataExtractThreadFinished);
 
-        // 提取完毕，恢复按钮的使用权限
-        ui->extractpushButton->setEnabled(false);
+        // 开始提取数据
+        dataThread->start();
+
+        // 计时开始
+        timer->start();
     }
+}
+
+void MainWindow::ondataExtractThreadFinished()
+{
+    // 提取完毕，弹出对话框提醒用户并显示所用时间
+    char temp[20];
+    sprintf(temp, "time: %.2f s", timer->elapsed() / 1000.0);
+    QMessageBox::information(this, "info", temp);
+
+    // 提取完毕，恢复按钮的使用权限
+    ui->extractpushButton->setEnabled(true);
 }

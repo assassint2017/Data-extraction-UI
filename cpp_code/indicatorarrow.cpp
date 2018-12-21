@@ -26,26 +26,44 @@ indicatorArrow::indicatorArrow()
 
     setMinimumWidth(35);
     setMaximumWidth(35);
+
+    // 创建局部的事件循环对象
+    loop = new QEventLoop;
+}
+
+indicatorArrow::~indicatorArrow()
+{
+
 }
 
 void indicatorArrow::onLcdadd()
 {
     upButton->setStyleSheet("border-image: url(:/active/upArrow)");
+    QTimer::singleShot(200, this, &indicatorArrow::onLcdAddTimeOut);
 
-    QEventLoop loop;
-    QTimer::singleShot(200, &loop, SLOT(quit()));
-    loop.exec();
-
-    upButton->setStyleSheet("border-image: url(:/deactive/upArrow)");
+    if (loop->isRunning() == false)
+        loop->exec();
 }
 
 void indicatorArrow::onLcdsub()
 {
     downButton->setStyleSheet("border-image: url(:/active/downArrow)");
+    QTimer::singleShot(200, this, &indicatorArrow::onLcdSubTimeOut);
 
-    QEventLoop loop;
-    QTimer::singleShot(200, &loop, SLOT(quit()));
-    loop.exec();
+    if (loop->isRunning() == false)
+        loop->exec();
+}
 
+void indicatorArrow::onLcdAddTimeOut()
+{
+    if (loop->isRunning())
+        loop->exit();
+    upButton->setStyleSheet("border-image: url(:/deactive/upArrow)");
+}
+
+void indicatorArrow::onLcdSubTimeOut()
+{
+    if (loop->isRunning())
+        loop->exit();
     downButton->setStyleSheet("border-image: url(:/deactive/downArrow)");
 }

@@ -25,27 +25,27 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->enddateEdit->setEnabled(false);
 
     // 创建自定义可拖拽文件的文本显示器
-    targetPathBrowser = new dropTextBrowser;
+    targetPathBrowser = new dropTextBrowser(this);
     QObject::connect(targetPathBrowser, &dropTextBrowser::fileNameChanged, this, &MainWindow::targetPathDrop);
     ui->horizontalLayout->insertWidget(1, targetPathBrowser);
 
     // 创建指示箭头
-    startYearArrow = new indicatorArrow;
-    startMonthArrow = new indicatorArrow;
-    startDateArrow = new indicatorArrow;
+    startYearArrow = new indicatorArrow(this);
+    startMonthArrow = new indicatorArrow(this);
+    startDateArrow = new indicatorArrow(this);
 
-    endYearArrow = new indicatorArrow;
-    endMonthArrow = new indicatorArrow;
-    endDateArrow = new indicatorArrow;
+    endYearArrow = new indicatorArrow(this);
+    endMonthArrow = new indicatorArrow(this);
+    endDateArrow = new indicatorArrow(this);
 
     // 创建lcd
-    startYearLcd = new lcd;
-    startMonthLcd = new lcd;
-    startDateLcd = new lcd;
+    startYearLcd = new lcd(this);
+    startMonthLcd = new lcd(this);
+    startDateLcd = new lcd(this);
 
-    endYearLcd = new lcd;
-    endMonthLcd = new lcd;
-    endDateLcd = new lcd;
+    endYearLcd = new lcd(this);
+    endMonthLcd = new lcd(this);
+    endDateLcd = new lcd(this);
 
     startYearLcd->setDigitCount(4);
     startYearLcd->setMaximumNumber(2100);
@@ -134,7 +134,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->horizontalLayout_4->insertWidget(13, endDateArrow);
 
     // 创建地区编号表格
-    regionEditer = new QTableWidget;
+    regionEditer = new QTableWidget(this);
 
     QStringList header;
     header << "地区编码";

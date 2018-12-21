@@ -7,7 +7,7 @@
 class dataExtractThread : public QThread
 {
 public:
-    dataExtractThread(QString);
+    explicit dataExtractThread(QString ,QObject *parent = nullptr);
     ~dataExtractThread();
 
 protected:

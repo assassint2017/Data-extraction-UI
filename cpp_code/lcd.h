@@ -8,7 +8,7 @@ class lcd : public QLCDNumber
 {
     Q_OBJECT
 public:
-    lcd();
+    explicit lcd(QWidget *parent = nullptr);
     ~lcd();
 
     // 设置日期范围

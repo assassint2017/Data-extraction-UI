@@ -1,7 +1,7 @@
 #include "droptextbrowser.h"
 
 
-dropTextBrowser::dropTextBrowser()
+dropTextBrowser::dropTextBrowser(QWidget *parent): QTextBrowser (parent)
 {
     setAcceptDrops(true);
     setMinimumHeight(25);

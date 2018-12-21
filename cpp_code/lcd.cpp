@@ -1,6 +1,6 @@
 #include "lcd.h"
 
-lcd::lcd()
+lcd::lcd(QWidget *parent) : QLCDNumber (parent)
 {
 
 }

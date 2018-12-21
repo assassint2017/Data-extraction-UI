@@ -1,6 +1,6 @@
 #include "dataextractthread.h"
 
-dataExtractThread::dataExtractThread(QString terminalCode)
+dataExtractThread::dataExtractThread(QString terminalCode, QObject *parent): QThread (parent)
 {
     this->terminalCode = terminalCode;
 }

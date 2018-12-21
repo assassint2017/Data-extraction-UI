@@ -10,7 +10,7 @@ class indicatorArrow : public QWidget
 {
     Q_OBJECT
 public:
-    indicatorArrow();
+    explicit indicatorArrow(QWidget *parent = nullptr);
     ~indicatorArrow();
 
     // 两个相应指示信号的槽函数

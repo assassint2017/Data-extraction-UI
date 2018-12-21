@@ -1,7 +1,7 @@
 #include "indicatorarrow.h"
 
 
-indicatorArrow::indicatorArrow()
+indicatorArrow::indicatorArrow(QWidget *parent): QWidget (parent)
 {
     QSize iconSize(20, 20);
 

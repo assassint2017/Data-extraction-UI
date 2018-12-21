@@ -15,7 +15,7 @@ class dropTextBrowser : public QTextBrowser
     Q_OBJECT
 
 public:
-    dropTextBrowser();
+    explicit dropTextBrowser(QWidget *parent = nullptr);
     ~dropTextBrowser();
 
 signals:
